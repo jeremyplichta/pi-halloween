@@ -62,6 +62,8 @@ def distance_callback(dist):
         openevent.wait(30)
         if openevent.is_set():
             closedevent.wait()
+            # let em clear out
+            time.sleep(5)
 
         scaring.clear()
 
