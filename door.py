@@ -19,28 +19,52 @@ class Door(threading.Thread):
                                   verbose=verbose)
         self.args = args
         self.doorcallback = args[0]
+        self.closecallback = args[1]
+        self.closedevent = args[2]
+        self.closedcount = 0
         self.gpio_door = kwargs['gpio_door']
 
         self.shouldstop = threading.Event()
         self.kwargs = kwargs
-        self.start()
+
+        self.closed = True
         
         return
 
     def stop(self):
         self.shouldstop.set()
 
-    def setup():
-        GPIO.setmode(GPIO.BOARD)
+    def setup(self):
 
         # Set pins as output and input
         GPIO.setup(self.gpio_door,GPIO.IN) 
 
 
     def run(self):
+        self.setup()
+
         while True:
             if self.shouldstop.isSet():
                 logging.debug('exiting door thread')
                 return
 
-            time.sleep(0.1)
+            # logging.debug('Door state: {} closedcount={}'.format(GPIO.input(self.gpio_door), self.closedcount))
+
+            if GPIO.input(self.gpio_door) == GPIO.LOW: # Check whether the button is pressed or not.
+                self.closedcount = min(5,self.closedcount + 1)
+                if not self.closed and self.closedcount == 5:
+                    self.closed = True
+                    self.closedevent.set()
+                    logging.info('Door Closed')
+                    if self.closecallback:
+                        self.closecallback()
+            else:
+                self.closedcount = 0
+                if self.closed:
+                    self.closed = False
+                    self.closedevent.clear()
+                    logging.info('Door Open')
+                    if self.doorcallback:
+                        self.doorcallback()
+
+            time.sleep(.25)

@@ -18,6 +18,7 @@ class Light(threading.Thread):
         self.args = args
         self.device = args[0]
         self.currentcolor = (136, 34, 0)
+        # self.currentcolor = (255, 60, 0)
 
         self.shouldstop = threading.Event()
         self.lightchanged = threading.Event()
@@ -47,10 +48,20 @@ class Light(threading.Thread):
         self.currentcolor = (0, 0, 0)
         self.lightchanged.set()
 
-    def changelight(self):
+    def fullon(self):
+        line = 'char-write-cmd 0x002e 56000000fc0faa'
+        if self.gatt and self.gatt.isalive():
+            self.gatt.sendline(line) 
+
+        self.lightchanged.clear()
+
+    def changelight(self, color=None):
+        if color:
+            self.currentcolor = color
+
         r,g,b = self.currentcolor
         line = 'char-write-cmd 0x002e 56{0:02X}{1:02X}{2:02X}00f0aa'.format(r, g, b)
-        if self.gatt.isalive():
+        if self.gatt and self.gatt.isalive():
             self.gatt.sendline(line) 
 
         self.lightchanged.clear()

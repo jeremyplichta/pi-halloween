@@ -31,10 +31,6 @@ class Distance(threading.Thread):
         self.shouldstop.set()
 
     def setup(self):
-        # Use BCM GPIO references
-        # instead of physical pin numbers
-        GPIO.setmode(GPIO.BOARD)
-
         # Define GPIO to use on Pi
 
         # Set pins as output and input
@@ -76,6 +72,8 @@ class Distance(threading.Thread):
         logging.debug('running with %s and %s', self.args, self.kwargs)
         self.setup()
 
+        GPIO.setmode(GPIO.BOARD)
+
         while True:
             if self.shouldstop.isSet():
                 logging.debug('exiting distance thread')
@@ -85,5 +83,6 @@ class Distance(threading.Thread):
             #logging.debug('distance=%d', dist)
             if dist <= self.mindistance and dist > 10:
                 self.distcallback(dist)
+
 
             time.sleep(.1)
