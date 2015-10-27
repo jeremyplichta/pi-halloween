@@ -101,9 +101,9 @@ try:
     while True:
         eyes.join(1)
         door.join(1)
-        #spk.join(1)
+        spk.join(1)
         dist.join(1)
-        #light.join(1)
+        light.join(1)
 
 except KeyboardInterrupt:
     print "interrupt"
