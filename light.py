@@ -61,6 +61,7 @@ class Light(threading.Thread):
 
         r,g,b = self.currentcolor
         line = 'char-write-cmd 0x002e 56{0:02X}{1:02X}{2:02X}00f0aa'.format(r, g, b)
+        logging.debug('light cmd: {}'.format(line))
         if self.gatt and self.gatt.isalive():
             self.gatt.sendline(line) 
 

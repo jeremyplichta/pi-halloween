@@ -16,6 +16,7 @@ logging.basicConfig(level=logging.DEBUG,
 scaring = threading.Event()
 doneplaying = threading.Event()
 closedevent = threading.Event()
+closedevent.set()
 openevent = threading.Event()
 
 light = Light(args=('74:DA:EA:90:FD:87',))
@@ -50,12 +51,11 @@ def distance_callback(dist):
         spk.play()
         time.sleep(.7)
         
-        eyes.turnon()
         light.turnoff()
+        eyes.turnon()
 
         doneplaying.wait()
 
-        light.turnon()
 
         doneplaying.clear()
 
@@ -63,18 +63,21 @@ def distance_callback(dist):
         if openevent.is_set():
             closedevent.wait()
             # let em clear out
-            time.sleep(5)
 
-        scaring.clear()
+        light.turnon()
+        eyes.turnoff()
+
+        threading.Timer(5, lambda: scaring.clear()).start()
 
 door = Door(args=(open_callback, close_callback, closedevent), kwargs={'gpio_door': 11})
 
         
-dist = Distance(args=(distance_callback, 150),
+dist = Distance(args=(distance_callback, 170),
                kwargs={'gpio_trigger': 16,
                       'gpio_echo': 18})
 
 def stopthreads():
+    light.fullon()
     spk.stop()
     dist.stop()
     light.stop()

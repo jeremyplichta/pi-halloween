@@ -43,6 +43,7 @@ class Door(threading.Thread):
     def run(self):
         self.setup()
 
+        threshold = 40
         while True:
             if self.shouldstop.isSet():
                 logging.debug('exiting door thread')
@@ -51,8 +52,8 @@ class Door(threading.Thread):
             # logging.debug('Door state: {} closedcount={}'.format(GPIO.input(self.gpio_door), self.closedcount))
 
             if GPIO.input(self.gpio_door) == GPIO.LOW: # Check whether the button is pressed or not.
-                self.closedcount = min(5,self.closedcount + 1)
-                if not self.closed and self.closedcount == 5:
+                self.closedcount = min(threshold,self.closedcount + 1)
+                if not self.closed and self.closedcount == threshold:
                     self.closed = True
                     self.closedevent.set()
                     logging.info('Door Closed')
@@ -67,4 +68,4 @@ class Door(threading.Thread):
                     if self.doorcallback:
                         self.doorcallback()
 
-            time.sleep(.25)
+            time.sleep(.05)

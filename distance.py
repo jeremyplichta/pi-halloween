@@ -85,4 +85,4 @@ class Distance(threading.Thread):
                 self.distcallback(dist)
 
 
-            time.sleep(.1)
+            time.sleep(.05)
