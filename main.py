@@ -59,7 +59,7 @@ def distance_callback(dist):
 
         doneplaying.clear()
 
-        openevent.wait(30)
+        openevent.wait(10)
         if openevent.is_set():
             closedevent.wait()
             # let em clear out
@@ -72,7 +72,7 @@ def distance_callback(dist):
 door = Door(args=(open_callback, close_callback, closedevent), kwargs={'gpio_door': 11})
 
         
-dist = Distance(args=(distance_callback, 170),
+dist = Distance(args=(distance_callback, 190),
                kwargs={'gpio_trigger': 16,
                       'gpio_echo': 18})
 
