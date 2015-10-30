@@ -7,7 +7,7 @@ import pexpect
 import time
 
 logging.basicConfig(level=logging.DEBUG,
-                    format='(%(threadName)-10s) %(message)s',
+                    format='(%(threadName)-10s) %(asctime)s %(message)s',
                     )
 
 class Light(threading.Thread):

@@ -8,7 +8,7 @@ import pexpect
 import sys
 
 logging.basicConfig(level=logging.DEBUG,
-                    format='(%(threadName)-10s) %(message)s',
+                    format='(%(threadName)-10s) %(asctime)s %(message)s',
                     )
 
 class Speaker(threading.Thread):

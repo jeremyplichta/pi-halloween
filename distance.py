@@ -8,7 +8,7 @@ import logging
 
 
 logging.basicConfig(level=logging.DEBUG,
-                    format='(%(threadName)-10s) %(message)s',
+                    format='(%(threadName)-10s) %(asctime)s %(message)s',
                     )
 
 class Distance(threading.Thread):

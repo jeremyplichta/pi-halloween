@@ -10,7 +10,7 @@ import threading
 import RPi.GPIO as GPIO
 
 logging.basicConfig(level=logging.DEBUG,
-                    format='(%(threadName)-10s) %(message)s',
+                    format='(%(threadName)-10s) %(asctime)s %(message)s',
                     )
 
 scaring = threading.Event()
